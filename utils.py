@@ -65,7 +65,7 @@ def create_graph(plot_list, ngrams):
         fig.layout.title.font.color = '#416649'
         figures.append(fig)
     rows = int(math.ceil((len(plot_list)/2)))
-    fig = make_subplots(rows=rows, cols=2, vertical_spacing=0.08, horizontal_spacing=0.1,
+    fig = make_subplots(rows=rows, cols=2, vertical_spacing=0.05, horizontal_spacing=0.1,
                         subplot_titles=[f.layout.title.text for f in figures])
     indexcols = [1, 2]
     indexrows = [(g // 2) + 1 for g in list(range(len(plot_list)))]
