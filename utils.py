@@ -51,12 +51,12 @@ def normalizar(palabra):
     return palabra
 
 
-def word_tokenize(text_list, phrase_len=2):
+def word_tokenize(text_list, phrase_len):
   split = [text.lower().split() for text in text_list]
   return [[' '.join(s[i:i + phrase_len])
              for i in range(len(s) - phrase_len + 1)] for s in split]
 
-def create_graph(plot_list):
+def create_graph(plot_list, ngrams):
     figures = []
     barcolors = plotly.colors.qualitative.Set1
     for i, pp in enumerate(plot_list):
@@ -65,7 +65,7 @@ def create_graph(plot_list):
         fig.layout.title.font.color = '#416649'
         figures.append(fig)
     rows = int(math.ceil((len(plot_list)/2)))
-    fig = make_subplots(rows=rows, cols=2, vertical_spacing=0.08, horizontal_spacing=0.08,
+    fig = make_subplots(rows=rows, cols=2, vertical_spacing=0.08, horizontal_spacing=0.1,
                         subplot_titles=[f.layout.title.text for f in figures])
     indexcols = [1, 2]
     indexrows = [(g // 2) + 1 for g in list(range(len(plot_list)))]
@@ -75,12 +75,14 @@ def create_graph(plot_list):
         fig.add_trace(trace=figures[j].data[0], row=fila, col=columna)
     fig.layout.height = 600 * rows
     fig.layout.template = 'gridon'
-    fig.layout.margin.l = 150
+    fig.layout.margin.l = 160
     fig.layout.margin.t = 150
     fig.update_layout(margin_pad=5)
     for a in range(1, len(plot_list) + 1):
         fig.layout[f'yaxis{a}'].dtick = 1
-    fig.layout.title = f'<b>Palabras más usadas en títulos | N-grams<b><br>{get_time_date()}'
+    if ngrams == None:
+        ngrams = '1 y 2'
+    fig.layout.title = f'<b>Palabras más usadas en títulos | {ngrams} grams<b><br>{get_time_date()}'
     viz = plot(fig, config={'displayModeBar': False}, output_type='div',
                include_plotlyjs='cdn', auto_open=False)
     viz = Markup(viz)
@@ -89,7 +91,7 @@ def create_graph(plot_list):
 
 def plot_word_counts(df, name, num_articles):
     fig = px.bar(df[::-1], x='freq', y='word', orientation='h',
-                 height=600, width=850, hover_name='word',
+                 height=600, width=650, hover_name='word',
                  title=f'<b>{name}</b> - ({num_articles} artículos)',
                  template='none', labels=df['word'].to_list())
     fig.layout.margin.l = 250
@@ -101,6 +103,5 @@ def send_slack(mensaje):
     webhook_url = os.environ['webhook']
     slack_data = {'text': mensaje}
     response = requests.post(webhook_url, data=json.dumps(slack_data), headers={'Content-Type': 'application/json'})
-    print(response.status_code)
 
 

@@ -7,10 +7,21 @@
     <style type="text/css">
         h1 { text-align: center;
         font-family: "Verdana"}
+        .enlace {font-family: "Verdana"}
+        .parrafo {margin-left: 50px}
     </style>
 </head>
 <body>
 <h1>{{title}}</h1>
-{{viz}}
+<p class="parrafo">
+    <a class = 'enlace' href={{url_for('main', sheet_name=sheet_name)}}>1 y 2 grams</a> |
+    <a class = 'enlace' href={{url_for('main', sheet_name=sheet_name)}}?ngrams=1>1 grams</a> |
+    <a class = 'enlace' href={{url_for('main', sheet_name=sheet_name)}}?ngrams=2>2 grams</a>
+</p>
+
+<p>
+    {{viz}}
+</p>
+
 </body>
 </html>
