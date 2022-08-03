@@ -60,7 +60,7 @@ def create_graph(plot_list, ngrams):
     figures = []
     #barcolors = plotly.colors.qualitative.Set1
     n_colors = len(plot_list)
-    barcolors = px.colors.sample_colorscale('portland', [n/(n_colors) for n in range(n_colors)])
+    barcolors = px.colors.sample_colorscale('turbo', [n/(n_colors) for n in range(n_colors)])
     for i, pp in enumerate(plot_list):
         fig = plot_word_counts(plot_list[i][0][:35], plot_list[i][1], plot_list[i][2])
         fig.data[0].marker.color = barcolors[i]
