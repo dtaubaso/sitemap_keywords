@@ -32,11 +32,18 @@ def main(sheet_name):
       min_ngrams = 1
       max_ngrams = 2
     for index, row in df.iterrows():
-      titles = get_titles(row['url'], row['category'])
-      tokens = []
-      for i in range(min_ngrams, max_ngrams+1):
-        tokens_ngrams = word_tokenize(titles, i)
-        tokens.extend(tokens_ngrams)
+      try:
+        titles = get_titles(row['url'], row['category'])
+        tokens = []
+        for i in range(min_ngrams, max_ngrams+1):
+          tokens_ngrams = word_tokenize(titles, i)
+          tokens.extend(tokens_ngrams)
+      except xmltodict.expat.ExpatError as e:
+        message = f'*Sitemaps Entidades Slack*\nOcurrió un error: {e} en {row["name"]}'
+        send_slack(mensaje)
+      except Exception:
+        message = f'*Sitemaps Entidades Slack*\nOcurrió un error:\n{traceback.format_exc()}'
+        send_slack(message)
       tokens_flat = functools.reduce(operator.iconcat, tokens, [])
       tokens_top = Counter(tokens_flat).most_common(100)
       df_tokens_top = pd.DataFrame(tokens_top, columns=['word', 'freq'])
