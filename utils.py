@@ -43,10 +43,11 @@ def get_titles(url, category):
 
 
 def normalizar(palabra):
-    palabra = re.sub(r'[^A-Za-záéíóúÁÉÍÓÚüÜÑñ ]+', '', palabra)
+    palabra  = palabra.lower()
+    palabra = re.sub(r'[^A-Za-záéíóúÁÉÍÓÚüÜÑñàçéíïl·lòóúü ]+', '', palabra)
     palabra = palabra.replace('ñ', '\001')
     palabra = normalize('NFKD', palabra).encode('ASCII', 'ignore').decode().replace('\001', 'ñ')
-    palabra = [a.lower() for a in palabra.split() if a.lower() not in stopwords]
+    palabra = [a.lower() for a in palabra.split() if a.lower() not in stopwords and len(a.lower())>1]
     palabra = " ".join(palabra)
     return palabra
 
