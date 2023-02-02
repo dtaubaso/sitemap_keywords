@@ -10,9 +10,10 @@ import gzip
 from io import BytesIO
 import xmltodict
 from unicodedata import normalize
-from stopwords import stopwords
 from user_agent import ua
 import random
+
+stopwords = requests.get("https://raw.githubusercontent.com/dtaubaso/aux/main/stopwords").text.split("\n")
 
 def get_time_date():
     now_raw = pytz.timezone('UTC').localize(datetime.utcnow())
