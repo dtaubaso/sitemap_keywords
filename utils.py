@@ -33,7 +33,12 @@ def get_titles(url, category):
     if category == 'RSS':
         titles = [a['title'] for a in parsed_raw['rss']['channel']['item']]
     elif category == 'Sitemap News':
-        titles = [a['news:news']['news:title'] for a in parsed_raw['urlset']['url']]
+        n = None
+        if 'news:news' in parsed_raw['urlset']['url'][0].keys():
+            n = 'news'
+        elif 'n:news' in parsed_raw['urlset']['url'][0].keys():
+            n = 'n'
+    titles = [a[f'{n}:news'][f'{n}:title'] for a in parsed_raw['urlset']['url']]
     titles = [re.sub("( \-.*)", "", a) for a in titles]
     titles = [a.replace('quote', '') for a in titles]
     titles = [a.replace('quot', '') for a in titles]
