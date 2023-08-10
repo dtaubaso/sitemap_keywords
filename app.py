@@ -41,7 +41,7 @@ def main(sheet_name):
       except xmltodict.expat.ExpatError as e:
         message = f'*Sitemaps {page_title}*\nOcurrió un error: {e} en {row["name"]}'
         send_slack(mensaje)
-      except Exception:
+      except Exception as e:
         message = f'*Sitemaps {page_title}*\nOcurrió un error: {e} en {row["name"]}'
         send_slack(message)
       tokens_flat = functools.reduce(operator.iconcat, tokens, [])
@@ -50,7 +50,7 @@ def main(sheet_name):
       plot_list.append([df_tokens_top, row['name'], len(titles)])
     viz = create_graph(plot_list, ngrams)
     return render_template('graph.html', title=page_title, viz=viz, sheet_name=sheet_name)
-  except Exception:
+  except Exception as e:
     if page_title != 'Robots.Txt' or page_title != 'Favicon.Ico':
       mensaje = f'*{page_title}*\nOcurrió un error:\n{traceback.format_exc()}'
       send_slack(mensaje)
