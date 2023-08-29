@@ -38,7 +38,8 @@ def get_titles(url, category):
             n = 'news'
         elif 'n:news' in parsed_raw['urlset']['url'][0].keys():
             n = 'n'
-        titles = [a[f'{n}:news'][f'{n}:title'] for a in parsed_raw['urlset']['url']]
+        titles = [a[f'{n}:news'][f'{n}:title'] for a in parsed_raw['urlset']['url'] 
+                  if f'{n}:title' in a[f'{n}:news']]
     titles = [re.sub("( \-.*)", "", a) for a in titles]
     titles = [a.replace('quote', '') for a in titles]
     titles = [a.replace('quot', '') for a in titles]
